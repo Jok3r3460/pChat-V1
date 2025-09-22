@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8" /><title>Chat — pChat</title><link rel="stylesheet" href="styles.css" /></head>
+<body>
+  <div class="chatLayout">
+    <div class="globalCol">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <div><strong id="myName">Anonymous</strong></div>
+        <div style="font-size:13px;color:#33ff33">Global ephemeral chat</div>
+      </div>
+      <div class="chatBox" id="chatBox" role="log" aria-live="polite"></div>
+      <div style="display:flex; gap:8px; margin-top:8px;">
+        <input id="msg" class="input" placeholder="Send to all, or use #username to send a private message (example: #jok3r hi)" />
+        <button id="send" class="btn">Send</button>
+      </div>
+    </div>
+    <div class="sideCol">
+      <div class="pmHeader">Private Sidebar</div>
+      <div class="pmList" id="pmList"></div>
+      <div style="font-size:12px;color:#33ff33;margin-top:8px">Use <code>#username</code> at start of message to send private notes to that user only.</div>
+    </div>
+  </div>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io();
+  const chatBox = document.getElementById('chatBox');
+  const pmList = document.getElementById('pmList');
+  const nameEl = document.getElementById('myName');
+  const msgInput = document.getElementById('msg');
+  const sendBtn = document.getElementById('send');
+  const name = localStorage.getItem('chatUsername');
+  const color = localStorage.getItem('chatColor') || '#00ff00';
+  if(!name) window.location.href = '/join.html';
+  nameEl.textContent = name;
+  socket.on('connect', () => {
+    socket.emit('set username', { name: name, color: color });
+  });
+  function appendGlobal(payload){ const el=document.createElement('div'); el.className='msg'; const meta=document.createElement('div'); meta.className='meta'; meta.textContent = payload.user + ' · ' + payload.fakeIp; const body=document.createElement('div'); body.className='msgBody'; body.textContent = payload.text; el.appendChild(meta); el.appendChild(body); el.style.borderLeft='4px solid '+(payload.color||'#00ff00'); chatBox.appendChild(el); chatBox.scrollTop = chatBox.scrollHeight; }
+  function appendPrivate(payload){ const el=document.createElement('div'); el.className='pmItem'; el.innerHTML = '<div style="font-weight:700">'+payload.from+'</div><div style="font-size:13px;color:#33ff33">'+payload.fakeIp+'</div><div style="margin-top:6px;white-space:pre-wrap">'+payload.text+'</div>'; pmList.appendChild(el); pmList.scrollTop = pmList.scrollHeight; }
+  socket.on('chat message', (p) => appendGlobal(p));
+  socket.on('private message', (p) => appendPrivate(p));
+  socket.on('system', (t) => { const el=document.createElement('div'); el.className='msg'; el.textContent='* '+t; chatBox.appendChild(el); });
+  sendBtn.addEventListener('click', send); msgInput.addEventListener('keyup', (e)=>{ if(e.key==='Enter') send(); });
+  function send(){ const t = msgInput.value.trim(); if(!t) return; socket.emit('chat message', t); msgInput.value=''; }
+</script>
+</body>
+</html>

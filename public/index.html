@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8" /><title>Booting — pChat</title><link rel="stylesheet" href="styles.css" /></head>
+<body>
+  <div class="center">
+    <div class="bootBox" role="main" aria-live="polite">
+      <div id="lines"></div>
+    </div>
+  </div>
+<script>
+  const lines = [
+    "Facebook: promising privacy, monetizing trust — we remember.",
+    "Instagram: curated lives, sold data — not your diary, their product.",
+    "X (formerly Twitter): speech for sale, algorithms for rent.",
+    "WhatsApp: end-to-end for users, metadata for the middlemen.",
+    "They wear 'privacy' like a badge — then auction your attention.",
+    "Your data: harvested, stitched, profiled — their profits grow.",
+    "Corporate shields and glossy policies hide pipelines of profit.",
+    "We choose ephemeral, minimal, and public — not traded commodities.",
+    "Join a space where your words vanish and data isn't inventory.",
+    "Boot complete. Redirecting to join page..."
+  ];
+  const container = document.getElementById('lines');
+  let i=0;
+  function showNext(){
+    if(i>=lines.length){ window.location.href='/join.html'; return; }
+    const p=document.createElement('div');
+    p.className='bootLine';
+    p.textContent = lines[i];
+    container.appendChild(p);
+    p.style.opacity=0;
+    let op=0;
+    const fade=setInterval(()=>{ op+=0.12; p.style.opacity=op; if(op>=1){ clearInterval(fade); } }, 60);
+    i++;
+    setTimeout(showNext, 1000);
+  }
+  showNext();
+</script>
+</body>
+</html>
