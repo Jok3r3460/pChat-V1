@@ -1,7 +1,20 @@
 <!doctype html>
-<html>
-<head><meta charset="utf-8" /><title>Chat — pChat</title><link rel="stylesheet" href="styles.css" /></head>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="pChat - Real-time chat application">
+    <title>Chat — pChat</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
 <body>
+  <div id="loadingScreen" class="loadingScreen">
+    <div class="loadingContent">
+      <div class="loadingText">Connecting...</div>
+      <div class="loadingSpinner"></div>
+    </div>
+  </div>
   <div class="chatLayout">
     <div class="globalCol">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
@@ -23,14 +36,36 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
   const socket = io();
+  const loadingScreen = document.getElementById('loadingScreen');
   const chatBox = document.getElementById('chatBox');
   const pmList = document.getElementById('pmList');
   const nameEl = document.getElementById('myName');
   const msgInput = document.getElementById('msg');
   const sendBtn = document.getElementById('send');
   const name = localStorage.getItem('chatUsername');
-  const color = localStorage.getItem('chatColor') || '#00ff00';
-  if(!name) window.location.href = '/join.html';
+  const color = '#00ff00';
+
+  // Redirect if no username
+  if(!name) {
+    window.location.href = '/join.html';
+  }
+
+  // Handle connection errors
+  socket.on('connect_error', () => {
+    loadingScreen.style.display = 'flex';
+    loadingScreen.querySelector('.loadingText').textContent = 'Connection error. Retrying...';
+  });
+
+  // Handle successful connection
+  socket.on('connect', () => {
+    loadingScreen.style.display = 'none';
+  });
+
+  // Handle disconnection
+  socket.on('disconnect', () => {
+    loadingScreen.style.display = 'flex';
+    loadingScreen.querySelector('.loadingText').textContent = 'Disconnected. Reconnecting...';
+  });
   nameEl.textContent = name;
   socket.on('connect', () => {
     socket.emit('set username', { name: name, color: color });
