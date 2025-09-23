@@ -2,7 +2,7 @@
 .private-chat-box {
     position: fixed;
     bottom: 0;
-    background: rgb(0, 10, 0);
+    background: #000000;
     border: 1px solid #003300;
     border-radius: 8px 8px 0 0;
     display: flex;
@@ -13,12 +13,13 @@
 
 .private-chat-header {
     padding: 12px;
-    background: rgba(0, 51, 0, 0.2);
+    background: #001100;
     border-bottom: 1px solid #003300;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-radius: 8px 8px 0 0;
+    color: #00ff00;
 }
 
 .chat-controls {
@@ -30,6 +31,9 @@
     padding: 4px 8px;
     min-width: 30px;
     height: 30px;
+    background: #001100;
+    color: #00ff00;
+    border: 1px solid #003300;
 }
 
 .private-chat-messages {
@@ -39,12 +43,12 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
-    background: rgba(0, 0, 0, 0.4);
+    background: #000000;
 }
 
 .private-chat-input {
     padding: 12px;
-    background: rgba(0, 51, 0, 0.2);
+    background: #001100;
     border-top: 1px solid #003300;
     display: flex;
     gap: 8px;
@@ -56,6 +60,9 @@
     max-height: 120px;
     resize: none;
     line-height: 1.4;
+    background: #000000;
+    color: #00ff00;
+    border: 1px solid #003300;
 }
 
 .pm-message {
@@ -68,21 +75,23 @@
 
 .pm-message.sent {
     align-self: flex-end;
-    background: #003300;
+    background: #001a00;
     margin-left: 20%;
     border-bottom-right-radius: 4px;
+    color: #00ff00;
 }
 
 .pm-message.received {
     align-self: flex-start;
-    background: rgba(0, 51, 0, 0.2);
+    background: #000d00;
     margin-right: 20%;
     border-bottom-left-radius: 4px;
+    color: #00ff00;
 }
 
 .pm-time {
     font-size: 11px;
-    color: #33ff33;
+    color: #00cc00;
     margin-top: 4px;
     opacity: 0.7;
 }
@@ -136,16 +145,61 @@
 
 .private-chat-messages::-webkit-scrollbar-track,
 .pmList::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.2);
+    background: #000000;
 }
 
 .private-chat-messages::-webkit-scrollbar-thumb,
 .pmList::-webkit-scrollbar-thumb {
-    background: #003300;
+    background: #002200;
     border-radius: 3px;
 }
 
 .private-chat-messages::-webkit-scrollbar-thumb:hover,
 .pmList::-webkit-scrollbar-thumb:hover {
-    background: #004400;
+    background: #003300;
+}
+
+/* Additional chat styles */
+.msg {
+    margin-bottom: 10px;
+    padding: 8px;
+    border-left: 3px solid #003300;
+    background: #000000;
+    color: #00ff00;
+}
+
+.meta {
+    font-size: 12px;
+    color: #00cc00;
+    margin-bottom: 4px;
+}
+
+.msgBody {
+    color: #00ff00;
+    word-break: break-word;
+}
+
+.pmItem {
+    padding: 8px;
+    margin-bottom: 6px;
+    background: #000000;
+    border: 1px solid #003300;
+    border-radius: 4px;
+    color: #00ff00;
+    cursor: pointer;
+}
+
+.pmItem:hover {
+    background: #001100;
+}
+
+.pmItem.active {
+    background: #002200;
+    border-color: #00cc00;
+}
+
+.pm-preview {
+    font-size: 12px;
+    color: #00aa00;
+    margin-top: 4px;
 }
