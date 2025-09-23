@@ -1,16 +1,8 @@
 <!doctype html>
 <    <div style="padding: 8px;">
         <select id="language-selector" class="input" style="width: auto; margin-right: 12px;" onchange="changeLanguage()">
-            <option value="en">English (US/UK)</option>
-            <option value="es">Español (Spanish)</option>
-            <option value="zh">中文 (Chinese)</option>
-            <option value="hi">हिंदी (Hindi)</option>
-            <option value="ar">العربية (Arabic)</option>
+            <option value="en">English</option>
             <option value="ur">Roman Urdu</option>
-            <option value="bn">বাংলা (Bengali)</option>
-            <option value="pt">Português (Portuguese)</option>
-            <option value="ru">Русский (Russian)</option>
-            <option value="ja">日本語 (Japanese)</option>
         </select>
     </div>
     <div class="chatLayout">
@@ -25,6 +17,7 @@
     <meta name="description" content="pChat - Real-time chat application">
     <title>Chat — pChat</title>
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="chat-styles.css" />
     <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>
@@ -56,7 +49,7 @@
   <script>
   const translations = {
     en: {
-        globalChat: "Global ephemeral chat",
+        globalChat: "Global Chat Room",
         privateSidebar: "Private Messages",
         sendPlaceholder: "Send to all, or use #username to send a private message",
         privateNote: "Click on a user to open private chat",
@@ -65,18 +58,8 @@
         connectionError: "Connection error. Retrying...",
         disconnected: "Disconnected. Reconnecting..."
     },
-    es: {
-        globalChat: "Chat global efímero",
-        privateSidebar: "Mensajes Privados",
-        sendPlaceholder: "Enviar a todos, o usar #usuario para mensaje privado",
-        privateNote: "Haz clic en un usuario para abrir el chat privado",
-        sendBtn: "Enviar",
-        connecting: "Conectando...",
-        connectionError: "Error de conexión. Reintentando...",
-        disconnected: "Desconectado. Reconectando..."
-    },
     ur: {
-        globalChat: "Global ephemeral chat",
+        globalChat: "Global Chat Room",
         privateSidebar: "Private Messages",
         sendPlaceholder: "Sab ko message bhejne ke liye type karen, ya private message ke liye #username istimal karen",
         privateNote: "Private chat kholne ke liye user par click karen",
@@ -129,34 +112,119 @@
       activePrivateChats.set(username, []);
       const el = document.createElement('div');
       el.className = 'pmItem';
-      el.innerHTML = '<div style="font-weight:700">'+username+'</div><div style="font-size:13px;color:#33ff33">'+payload.fakeIp+'</div>';
+      el.setAttribute('data-username', username);
+      el.innerHTML = `
+        <div style="font-weight:700">${username}</div>
+        <div style="font-size:13px;color:#33ff33">${payload.fakeIp}</div>
+        <div class="pm-preview" style="color:#666"></div>
+      `;
       el.onclick = () => openPrivateChat(username);
-      pmList.appendChild(el);
+      pmList.insertBefore(el, pmList.firstChild);
     }
     
-    activePrivateChats.get(username).push(payload);
+    const messages = activePrivateChats.get(username);
+    messages.push(payload);
+    
+    // Update preview
+    const pmItem = document.querySelector(`.pmItem[data-username="${username}"]`);
+    if (pmItem) {
+      const preview = pmItem.querySelector('.pm-preview');
+      preview.textContent = payload.text.substring(0, 30) + (payload.text.length > 30 ? '...' : '');
+      // Move to top
+      pmList.insertBefore(pmItem, pmList.firstChild);
+    }
+    
     updatePrivateChatMessages(username);
   }
 
   function openPrivateChat(username) {
+    // Remove active class from all items
+    document.querySelectorAll('.pmItem').forEach(item => item.classList.remove('active'));
+    
+    // Add active class to clicked item
+    const pmItem = document.querySelector(`.pmItem[data-username="${username}"]`);
+    if (pmItem) pmItem.classList.add('active');
+    
     let chatBox = document.querySelector(`.private-chat-box[data-username="${username}"]`);
     if (!chatBox) {
+      // Close other chat boxes on mobile
+      if (window.innerWidth <= 768) {
+        document.querySelectorAll('.private-chat-box').forEach(box => box.remove());
+      }
+      
       chatBox = document.createElement('div');
       chatBox.className = 'private-chat-box';
       chatBox.setAttribute('data-username', username);
+      
+      const boxPosition = calculateChatBoxPosition();
+      Object.assign(chatBox.style, boxPosition);
+      
       chatBox.innerHTML = `
         <div class="private-chat-header">
           <div style="font-weight:700">${username}</div>
-          <button class="btn" onclick="this.closest('.private-chat-box').remove()">×</button>
+          <div class="chat-controls">
+            <button class="btn" onclick="minimizeChat(this)" title="Minimize">_</button>
+            <button class="btn" onclick="this.closest('.private-chat-box').remove()">×</button>
+          </div>
         </div>
         <div class="private-chat-messages"></div>
         <div class="private-chat-input">
-          <input class="input" placeholder="Type your message..." onkeyup="if(event.key==='Enter')sendPrivate('${username}',this)">
+          <textarea class="input" 
+            placeholder="Type your message..." 
+            onkeyup="if(event.key==='Enter' && !event.shiftKey){event.preventDefault();sendPrivate('${username}',this)}"
+            rows="1"
+          ></textarea>
           <button class="btn" onclick="sendPrivate('${username}',this.previousElementSibling)">Send</button>
         </div>
       `;
       document.body.appendChild(chatBox);
       updatePrivateChatMessages(username);
+      
+      // Focus input
+      chatBox.querySelector('textarea').focus();
+    }
+  }
+  
+  function calculateChatBoxPosition() {
+    const existingBoxes = document.querySelectorAll('.private-chat-box');
+    const baseRight = window.innerWidth <= 768 ? 0 : 320; // Account for sidebar on desktop
+    const spacing = 20;
+    
+    if (window.innerWidth <= 768) {
+      return {
+        bottom: '0',
+        right: '0',
+        left: '0',
+        width: '100%',
+        height: '50vh'
+      };
+    }
+    
+    const right = baseRight + (existingBoxes.length * (320 + spacing));
+    
+    return {
+      bottom: '0',
+      right: right + 'px',
+      width: '320px',
+      height: '400px'
+    };
+  }
+  
+  function minimizeChat(btn) {
+    const chatBox = btn.closest('.private-chat-box');
+    const messages = chatBox.querySelector('.private-chat-messages');
+    const input = chatBox.querySelector('.private-chat-input');
+    
+    if (messages.style.display === 'none') {
+      messages.style.display = 'flex';
+      input.style.display = 'flex';
+      chatBox.style.height = window.innerWidth <= 768 ? '50vh' : '400px';
+      btn.textContent = '_';
+    } else {
+      messages.style.display = 'none';
+      input.style.display = 'none';
+      chatBox.style.height = 'auto';
+      btn.textContent = '□';
     }
   }
 
