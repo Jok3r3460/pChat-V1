@@ -6,34 +6,69 @@
     <title>Chat Rules</title>
     <link rel="stylesheet" href="styles.css">
     <style>
+        .container {
+            width: 760px;
+            max-width: 95%;
+            margin: 40px auto;
+        }
         .rules-container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
+            padding: 24px;
+            border: 2px solid #003300;
+            background: rgba(0, 0, 0, 0.6);
         }
         #timer {
             font-size: 24px;
-            color: #fff;
+            color: #00ff00;
             margin: 20px 0;
+            text-align: center;
         }
         #language-selector {
-            margin: 20px 0;
-            padding: 10px;
-            font-size: 16px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 5px;
+            width: 100%;
+            margin: 0 0 20px 0;
+            padding: 12px;
+            font-size: 15px;
+            background: rgba(0, 51, 0, 0.2);
+            color: #00ff00;
+            border: 1px solid #003300;
+            border-radius: 4px;
+            font-family: "Courier New", Courier, monospace;
         }
-        #continue-btn {
-            display: none;
+        #language-selector:focus {
+            border-color: #00ff00;
+            outline: none;
+        }
+        #continue-btn, #skip-btn {
             margin-top: 20px;
+            background: rgba(0, 51, 0, 0.2);
+            color: #00ff00;
+            border: 1px solid #003300;
+            padding: 12px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-family: "Courier New", Courier, monospace;
+            transition: all 0.2s;
+        }
+        #continue-btn:hover, #skip-btn:hover {
+            background: #003300;
         }
         .rules-list {
             text-align: left;
             margin: 20px 0;
+            color: #00ff00;
+        }
+        .rules-list p {
+            margin: 10px 0;
+            color: #33ff33;
+        }
+        #rules-title {
+            font-size: 20px;
+            margin: 0 0 12px 0;
+            color: #00ff00;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
         }
     </style>
 </head>
@@ -107,7 +142,10 @@
             <div class="rules-list" id="rules-content">
                 <!-- Rules content will be populated by JavaScript -->
             </div>
-            <button id="continue-btn" onclick="proceedToChat()" class="btn">Continue to Chat</button>
+            <div class="button-group">
+                <button id="skip-btn" onclick="proceedToChat()" class="btn">Skip Wait</button>
+                <button id="continue-btn" onclick="proceedToChat()" class="btn">Continue to Chat</button>
+            </div>
         </div>
     </div>
 
@@ -250,6 +288,7 @@
         let timeLeft = 60;
         const timerElement = document.getElementById('timer');
         const continueBtn = document.getElementById('continue-btn');
+        const skipBtn = document.getElementById('skip-btn');
 
         // Timer countdown
         const timer = setInterval(() => {
@@ -258,6 +297,7 @@
             if (timeLeft <= 0) {
                 clearInterval(timer);
                 timerElement.style.display = 'none';
+                skipBtn.style.display = 'none';
                 continueBtn.style.display = 'block';
             }
         }, 1000);
@@ -269,15 +309,18 @@
             document.getElementById('rules-title').textContent = translation.title;
             const rulesList = document.getElementById('rules-content');
             rulesList.innerHTML = translation.rules.map(rule => `<p>• ${rule}</p>`).join('');
+            
+            // Store the selected language
+            localStorage.setItem('preferredLanguage', lang);
         }
 
         function proceedToChat() {
-            if (timeLeft <= 0) {
-                window.location.href = `/chat.html?username=${encodeURIComponent(username)}`;
-            }
+            window.location.href = `/chat.html?username=${encodeURIComponent(username)}`;
         }
 
-        // Initialize with English
+        // Initialize with stored language preference
+        const storedLang = localStorage.getItem('preferredLanguage') || 'en';
+        document.getElementById('language-selector').value = storedLang;
         changeLanguage();
     </script>
 </body>

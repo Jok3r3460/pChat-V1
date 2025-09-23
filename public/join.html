@@ -11,37 +11,93 @@
 <body>
   <div class="joinWrap">
     <div class="h1">pChat — JOIN</div>
-    <div style="font-size:13px; color:#33ff33">Enter a display name to join the chat.</div>
+    <select id="language-selector" class="input" style="margin-bottom: 12px;" onchange="changeLanguage()">
+      <option value="en">English (US/UK)</option>
+      <option value="es">Español (Spanish)</option>
+      <option value="zh">中文 (Chinese)</option>
+      <option value="hi">हिंदी (Hindi)</option>
+      <option value="ar">العربية (Arabic)</option>
+      <option value="bn">বাংলা (Bengali)</option>
+      <option value="pt">Português (Portuguese)</option>
+      <option value="ru">Русский (Russian)</option>
+      <option value="ja">日本語 (Japanese)</option>
+      <!-- Add all other languages as in rules.html -->
+    </select>
+    <div style="font-size:13px; color:#33ff33" id="join-message">Enter a display name to join the chat.</div>
     <div class="row">
       <input id="name" class="input" placeholder="Enter display name (max 32 chars)" maxlength="32" />
-      <button id="enter" class="btn">Enter</button>
+      <button id="enter" class="btn" id="enter-btn">Enter</button>
     </div>
-    <div style="margin-top:12px; font-size:12px; color:#33ff33">After entering, you'll join the global chat. Messages are ephemeral and cleared on refresh.</div>
+    <div style="margin-top:12px; font-size:12px; color:#33ff33" id="join-note">After entering, you'll join the global chat. Messages are ephemeral and cleared on refresh.</div>
   </div>
 <script>
   const nameInput = document.getElementById('name');
   const enterBtn = document.getElementById('enter');
   
+  const translations = {
+    en: {
+      message: "Enter a display name to join the chat.",
+      placeholder: "Enter display name (max 32 chars)",
+      enterBtn: "Enter",
+      joining: "Joining...",
+      note: "After entering, you'll join the global chat. Messages are ephemeral and cleared on refresh.",
+      errors: {
+        required: "Display name is required.",
+        length: "Display name must be at least 3 characters.",
+        format: "Display name can only contain letters, numbers, underscores and hyphens."
+      }
+    },
+    es: {
+      message: "Ingresa un nombre para unirte al chat.",
+      placeholder: "Ingresa tu nombre (máx. 32 caracteres)",
+      enterBtn: "Entrar",
+      joining: "Entrando...",
+      note: "Después de ingresar, te unirás al chat global. Los mensajes son efímeros y se borran al actualizar.",
+      errors: {
+        required: "Se requiere un nombre.",
+        length: "El nombre debe tener al menos 3 caracteres.",
+        format: "El nombre solo puede contener letras, números, guiones bajos y guiones."
+      }
+    }
+    // Add other languages here
+  };
+
+  function changeLanguage() {
+    const lang = document.getElementById('language-selector').value;
+    const translation = translations[lang] || translations.en;
+    
+    document.getElementById('join-message').textContent = translation.message;
+    document.getElementById('join-note').textContent = translation.note;
+    nameInput.placeholder = translation.placeholder;
+    enterBtn.textContent = translation.enterBtn;
+    
+    // Store selected language for use in rules page
+    localStorage.setItem('preferredLanguage', lang);
+  }
+
   function validateAndJoin() {
     const name = nameInput.value.trim();
+    const lang = document.getElementById('language-selector').value;
+    const translation = translations[lang] || translations.en;
+
     if (!name) {
-      alert('Display name is required.');
+      alert(translation.errors.required);
       nameInput.focus();
       return;
     }
     if (name.length < 3) {
-      alert('Display name must be at least 3 characters.');
+      alert(translation.errors.length);
       nameInput.focus();
       return;
     }
     if (!/^[A-Za-z0-9_-]+$/.test(name)) {
-      alert('Display name can only contain letters, numbers, underscores and hyphens.');
+      alert(translation.errors.format);
       nameInput.focus();
       return;
     }
     
     enterBtn.disabled = true;
-    enterBtn.textContent = 'Joining...';
+    enterBtn.textContent = translation.joining;
     
     localStorage.setItem('chatUsername', name);
     window.location.href = `/rules.html?username=${encodeURIComponent(name)}`;
@@ -51,6 +107,11 @@
   nameInput.addEventListener('keyup', (e) => {
     if (e.key === 'Enter') validateAndJoin();
   });
+
+  // Initialize with stored language or default
+  const storedLang = localStorage.getItem('preferredLanguage') || 'en';
+  document.getElementById('language-selector').value = storedLang;
+  changeLanguage();
 </script>
 </body>
 </html>
