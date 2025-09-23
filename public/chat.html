@@ -1,5 +1,24 @@
 <!doctype html>
-<html lang="en">
+<    <div style="padding: 8px;">
+        <select id="language-selector" class="input" style="width: auto; margin-right: 12px;" onchange="changeLanguage()">
+            <option value="en">English (US/UK)</option>
+            <option value="es">Español (Spanish)</option>
+            <option value="zh">中文 (Chinese)</option>
+            <option value="hi">हिंदी (Hindi)</option>
+            <option value="ar">العربية (Arabic)</option>
+            <option value="ur">Roman Urdu</option>
+            <option value="bn">বাংলা (Bengali)</option>
+            <option value="pt">Português (Portuguese)</option>
+            <option value="ru">Русский (Russian)</option>
+            <option value="ja">日本語 (Japanese)</option>
+        </select>
+    </div>
+    <div class="chatLayout">
+    <div class="globalCol">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <div><strong id="myName">Anonymous</strong></div>
+        <div style="font-size:13px;color:#33ff33" id="global-chat-text">Global ephemeral chat</div>
+      </div>ang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,7 +53,40 @@
     </div>
   </div>
 <script src="/socket.io/socket.io.js"></script>
-<script>
+  <script>
+  const translations = {
+    en: {
+        globalChat: "Global ephemeral chat",
+        privateSidebar: "Private Messages",
+        sendPlaceholder: "Send to all, or use #username to send a private message",
+        privateNote: "Click on a user to open private chat",
+        sendBtn: "Send",
+        connecting: "Connecting...",
+        connectionError: "Connection error. Retrying...",
+        disconnected: "Disconnected. Reconnecting..."
+    },
+    es: {
+        globalChat: "Chat global efímero",
+        privateSidebar: "Mensajes Privados",
+        sendPlaceholder: "Enviar a todos, o usar #usuario para mensaje privado",
+        privateNote: "Haz clic en un usuario para abrir el chat privado",
+        sendBtn: "Enviar",
+        connecting: "Conectando...",
+        connectionError: "Error de conexión. Reintentando...",
+        disconnected: "Desconectado. Reconectando..."
+    },
+    ur: {
+        globalChat: "Global ephemeral chat",
+        privateSidebar: "Private Messages",
+        sendPlaceholder: "Sab ko message bhejne ke liye type karen, ya private message ke liye #username istimal karen",
+        privateNote: "Private chat kholne ke liye user par click karen",
+        sendBtn: "Bhejein",
+        connecting: "Connect ho raha hai...",
+        connectionError: "Connection error. Dobara koshish kar rahe hain...",
+        disconnected: "Disconnect ho gaya. Reconnect ho raha hai..."
+    }
+  };
+
   const socket = io();
   const loadingScreen = document.getElementById('loadingScreen');
   const chatBox = document.getElementById('chatBox');
@@ -44,8 +96,8 @@
   const sendBtn = document.getElementById('send');
   const name = localStorage.getItem('chatUsername');
   const color = '#00ff00';
-
-  // Redirect if no username
+  
+  let activePrivateChats = new Map(); // Store active private chat users and their messages  // Redirect if no username
   if(!name) {
     window.location.href = '/join.html';
   }
@@ -71,12 +123,100 @@
     socket.emit('set username', { name: name, color: color });
   });
   function appendGlobal(payload){ const el=document.createElement('div'); el.className='msg'; const meta=document.createElement('div'); meta.className='meta'; meta.textContent = payload.user + ' · ' + payload.fakeIp; const body=document.createElement('div'); body.className='msgBody'; body.textContent = payload.text; el.appendChild(meta); el.appendChild(body); el.style.borderLeft='4px solid '+(payload.color||'#00ff00'); chatBox.appendChild(el); chatBox.scrollTop = chatBox.scrollHeight; }
-  function appendPrivate(payload){ const el=document.createElement('div'); el.className='pmItem'; el.innerHTML = '<div style="font-weight:700">'+payload.from+'</div><div style="font-size:13px;color:#33ff33">'+payload.fakeIp+'</div><div style="margin-top:6px;white-space:pre-wrap">'+payload.text+'</div>'; pmList.appendChild(el); pmList.scrollTop = pmList.scrollHeight; }
+  function appendPrivate(payload) {
+    let username = payload.from;
+    if (!activePrivateChats.has(username)) {
+      activePrivateChats.set(username, []);
+      const el = document.createElement('div');
+      el.className = 'pmItem';
+      el.innerHTML = '<div style="font-weight:700">'+username+'</div><div style="font-size:13px;color:#33ff33">'+payload.fakeIp+'</div>';
+      el.onclick = () => openPrivateChat(username);
+      pmList.appendChild(el);
+    }
+    
+    activePrivateChats.get(username).push(payload);
+    updatePrivateChatMessages(username);
+  }
+
+  function openPrivateChat(username) {
+    let chatBox = document.querySelector(`.private-chat-box[data-username="${username}"]`);
+    if (!chatBox) {
+      chatBox = document.createElement('div');
+      chatBox.className = 'private-chat-box';
+      chatBox.setAttribute('data-username', username);
+      chatBox.innerHTML = `
+        <div class="private-chat-header">
+          <div style="font-weight:700">${username}</div>
+          <button class="btn" onclick="this.closest('.private-chat-box').remove()">×</button>
+        </div>
+        <div class="private-chat-messages"></div>
+        <div class="private-chat-input">
+          <input class="input" placeholder="Type your message..." onkeyup="if(event.key==='Enter')sendPrivate('${username}',this)">
+          <button class="btn" onclick="sendPrivate('${username}',this.previousElementSibling)">Send</button>
+        </div>
+      `;
+      document.body.appendChild(chatBox);
+      updatePrivateChatMessages(username);
+    }
+  }
+
+  function updatePrivateChatMessages(username) {
+    const messages = activePrivateChats.get(username) || [];
+    const chatBox = document.querySelector(`.private-chat-box[data-username="${username}"] .private-chat-messages`);
+    if (chatBox) {
+      chatBox.innerHTML = messages.map(msg => `
+        <div class="msg" style="border-left: 4px solid ${msg.color || '#00ff00'}">
+          <div class="meta">${msg.from} · ${msg.fakeIp}</div>
+          <div class="msgBody">${msg.text}</div>
+        </div>
+      `).join('');
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+  }
+
+  function sendPrivate(username, input) {
+    const text = input.value.trim();
+    if (!text) return;
+    socket.emit('chat message', `#${username} ${text}`);
+    input.value = '';
+  }
+
+  function changeLanguage() {
+    const lang = document.getElementById('language-selector').value;
+    const translation = translations[lang] || translations.en;
+    
+    document.getElementById('global-chat-text').textContent = translation.globalChat;
+    document.querySelector('.pmHeader').textContent = translation.privateSidebar;
+    msgInput.placeholder = translation.sendPlaceholder;
+    sendBtn.textContent = translation.sendBtn;
+    
+    document.querySelector('.pmList').nextElementSibling.textContent = translation.privateNote;
+    
+    localStorage.setItem('preferredLanguage', lang);
+  }
+
+  // Initialize with system language
+  const systemLang = navigator.language.split('-')[0];
+  const storedLang = localStorage.getItem('preferredLanguage');
+  const defaultLang = translations.hasOwnProperty(systemLang) ? systemLang : 'en';
+  const selectedLang = storedLang || defaultLang;
+  
+  document.getElementById('language-selector').value = selectedLang;
+  changeLanguage();
+
   socket.on('chat message', (p) => appendGlobal(p));
   socket.on('private message', (p) => appendPrivate(p));
   socket.on('system', (t) => { const el=document.createElement('div'); el.className='msg'; el.textContent='* '+t; chatBox.appendChild(el); });
-  sendBtn.addEventListener('click', send); msgInput.addEventListener('keyup', (e)=>{ if(e.key==='Enter') send(); });
-  function send(){ const t = msgInput.value.trim(); if(!t) return; socket.emit('chat message', t); msgInput.value=''; }
+  
+  sendBtn.addEventListener('click', send);
+  msgInput.addEventListener('keyup', (e) => { if(e.key === 'Enter') send(); });
+  
+  function send() {
+    const t = msgInput.value.trim();
+    if (!t) return;
+    socket.emit('chat message', t);
+    msgInput.value = '';
+  }
 </script>
 </body>
 </html>
