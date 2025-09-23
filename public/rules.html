@@ -40,19 +40,65 @@
 <body>
     <div class="container">
         <select id="language-selector" onchange="changeLanguage()">
+            <!-- Major World Languages -->
             <option value="en">English (US/UK)</option>
             <option value="es">Español (Spanish)</option>
             <option value="zh">中文 (Chinese)</option>
-            <option value="ja">日本語 (Japanese)</option>
-            <option value="ko">한국어 (Korean)</option>
-            <option value="de">Deutsch (German)</option>
-            <option value="ru">Русский (Russian)</option>
-            <option value="fr">Français (French)</option>
             <option value="hi">हिंदी (Hindi)</option>
-            <option value="ur">اردو (Urdu)</option>
-            <option value="it">Italiano (Italian)</option>
-            <option value="tr">Türkçe (Turkish)</option>
             <option value="ar">العربية (Arabic)</option>
+            <option value="bn">বাংলা (Bengali)</option>
+            <option value="pt">Português (Portuguese)</option>
+            <option value="ru">Русский (Russian)</option>
+            <option value="ja">日本語 (Japanese)</option>
+            <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
+            
+            <!-- European Languages -->
+            <option value="de">Deutsch (German)</option>
+            <option value="fr">Français (French)</option>
+            <option value="it">Italiano (Italian)</option>
+            <option value="pl">Polski (Polish)</option>
+            <option value="uk">Українська (Ukrainian)</option>
+            <option value="nl">Nederlands (Dutch)</option>
+            <option value="el">Ελληνικά (Greek)</option>
+            <option value="hu">Magyar (Hungarian)</option>
+            <option value="cs">Čeština (Czech)</option>
+            <option value="sv">Svenska (Swedish)</option>
+            <option value="ro">Română (Romanian)</option>
+            <option value="bg">Български (Bulgarian)</option>
+            
+            <!-- Asian Languages -->
+            <option value="ko">한국어 (Korean)</option>
+            <option value="vi">Tiếng Việt (Vietnamese)</option>
+            <option value="th">ไทย (Thai)</option>
+            <option value="id">Bahasa Indonesia (Indonesian)</option>
+            <option value="ms">Bahasa Melayu (Malay)</option>
+            <option value="fa">فارسی (Persian)</option>
+            <option value="ur">اردو (Urdu)</option>
+            <option value="ta">தமிழ் (Tamil)</option>
+            <option value="te">తెలుగు (Telugu)</option>
+            <option value="mr">मराठी (Marathi)</option>
+            <option value="gu">ગુજરાતી (Gujarati)</option>
+            <option value="kn">ಕನ್ನಡ (Kannada)</option>
+            
+            <!-- Middle Eastern Languages -->
+            <option value="tr">Türkçe (Turkish)</option>
+            <option value="he">עברית (Hebrew)</option>
+            <option value="ar-eg">العربية - مصر (Arabic - Egypt)</option>
+            <option value="ar-sa">العربية - السعودية (Arabic - Saudi)</option>
+            
+            <!-- African Languages -->
+            <option value="sw">Kiswahili (Swahili)</option>
+            <option value="ha">Hausa (Hausa)</option>
+            <option value="am">አማርኛ (Amharic)</option>
+            <option value="yo">Yorùbá (Yoruba)</option>
+            <option value="zu">isiZulu (Zulu)</option>
+            
+            <!-- Other Languages -->
+            <option value="fil">Filipino (Filipino)</option>
+            <option value="my">မြန်မာ (Burmese)</option>
+            <option value="km">ខ្មែរ (Khmer)</option>
+            <option value="ne">नेपाली (Nepali)</option>
+            <option value="si">සිංහල (Sinhala)</option>
         </select>
 
         <div class="rules-container">
@@ -72,6 +118,7 @@
 
         // Language translations
         const translations = {
+            // English
             en: {
                 title: "Community Rules",
                 rules: [
@@ -85,11 +132,12 @@
                     "No sharing of personal information"
                 ]
             },
+            // Spanish
             es: {
                 title: "Reglas de la Comunidad",
                 rules: [
-                    "No discurso de odio ni discriminación",
-                    "No comportamiento abusivo ni acoso",
+                    "No al discurso de odio ni discriminación",
+                    "No al comportamiento abusivo ni acoso",
                     "No compartir contenido inapropiado o para adultos",
                     "No compartir enlaces peligrosos o maliciosos",
                     "Respetar a otros usuarios y su privacidad",
@@ -98,7 +146,105 @@
                     "No compartir información personal"
                 ]
             },
-            // Add other languages here
+            // Chinese
+            zh: {
+                title: "社区规则",
+                rules: [
+                    "禁止仇恨言论或任何形式的歧视",
+                    "禁止滥用行为或骚扰",
+                    "禁止分享不当或成人内容",
+                    "禁止分享危险或恶意链接",
+                    "尊重其他用户及其隐私",
+                    "保持文明友好的对话",
+                    "禁止垃圾信息或刷屏",
+                    "禁止分享个人信息"
+                ]
+            },
+            // Hindi
+            hi: {
+                title: "सामुदायिक नियम",
+                rules: [
+                    "किसी भी प्रकार की घृणा भाषण या भेदभाव नहीं",
+                    "दुर्व्यवहार या उत्पीड़न नहीं",
+                    "अनुचित या वयस्क सामग्री साझा न करें",
+                    "खतरनाक या दुर्भावनापूर्ण लिंक साझा न करें",
+                    "अन्य उपयोगकर्ताओं और उनकी गोपनीयता का सम्मान करें",
+                    "बातचीत सभ्य और मैत्रीपूर्ण रखें",
+                    "स्पैमिंग या चैट को फ्लड न करें",
+                    "व्यक्तिगत जानकारी साझा न करें"
+                ]
+            },
+            // Arabic
+            ar: {
+                title: "قواعد المجتمع",
+                rules: [
+                    "لا خطاب كراهية أو تمييز من أي نوع",
+                    "لا سلوك مسيء أو تحرش",
+                    "لا مشاركة محتوى غير لائق أو للبالغين",
+                    "لا مشاركة روابط خطيرة أو ضارة",
+                    "احترام المستخدمين الآخرين وخصوصيتهم",
+                    "الحفاظ على المحادثات مهذبة وودية",
+                    "لا إرسال رسائل مزعجة أو إغراق الدردشة",
+                    "لا مشاركة معلومات شخصية"
+                ]
+            },
+            // Japanese
+            ja: {
+                title: "コミュニティルール",
+                rules: [
+                    "いかなる種類の憎悪表現や差別も禁止",
+                    "虐待的な行為やハラスメントの禁止",
+                    "不適切または成人向けコンテンツの共有禁止",
+                    "危険な、または悪意のあるリンクの共有禁止",
+                    "他のユーザーとそのプライバシーを尊重",
+                    "会話は礼儀正しく友好的に保つ",
+                    "スパムやチャットの氾濫禁止",
+                    "個人情報の共有禁止"
+                ]
+            },
+            // German
+            de: {
+                title: "Gemeinschaftsregeln",
+                rules: [
+                    "Keine Hassrede oder Diskriminierung jeglicher Art",
+                    "Kein missbräuchliches Verhalten oder Belästigung",
+                    "Keine Weitergabe von unangemessenen oder nicht jugendfreien Inhalten",
+                    "Keine Weitergabe von gefährlichen oder böswilligen Links",
+                    "Respektiere andere Benutzer und ihre Privatsphäre",
+                    "Halte Gespräche höflich und freundlich",
+                    "Kein Spamming oder Fluten des Chats",
+                    "Keine Weitergabe persönlicher Informationen"
+                ]
+            },
+            // French
+            fr: {
+                title: "Règles de la Communauté",
+                rules: [
+                    "Pas de discours haineux ni de discrimination",
+                    "Pas de comportement abusif ni de harcèlement",
+                    "Pas de partage de contenu inapproprié ou pour adultes",
+                    "Pas de partage de liens dangereux ou malveillants",
+                    "Respectez les autres utilisateurs et leur vie privée",
+                    "Gardez les conversations civiles et amicales",
+                    "Pas de spam ni d'inondation du chat",
+                    "Pas de partage d'informations personnelles"
+                ]
+            },
+            // Russian
+            ru: {
+                title: "Правила сообщества",
+                rules: [
+                    "Никакой речи ненависти или дискриминации",
+                    "Никакого оскорбительного поведения или преследования",
+                    "Не делитесь неприемлемым или взрослым контентом",
+                    "Не делитесь опасными или вредоносными ссылками",
+                    "Уважайте других пользователей и их конфиденциальность",
+                    "Поддерживайте вежливое и дружелюбное общение",
+                    "Не спамьте и не флудите в чате",
+                    "Не делитесь личной информацией"
+                ]
+            }
+            // Note: Additional languages can be added following the same pattern
         };
 
         let timeLeft = 60;
