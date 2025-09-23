@@ -1,155 +1,256 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta    es: {
-      message: "Ingresa un nombre para unirte al chat.",
-      placeholder: "Ingresa tu nombre (máx. 32 caracteres)",
-      enterBtn: "Entrar",
-      joining: "Entrando...",
-      note: "Después de ingresar, te unirás al chat global. Los mensajes son efímeros y se borran al actualizar.",
-      errors: {
-        required: "Se requiere un nombre.",
-        length: "El nombre debe tener al menos 3 caracteres.",
-        format: "El nombre solo puede contener letras, números, guiones bajos y guiones."
-      }
-    },
-    // Roman Urdu
-    ur: {
-      message: "Chat join karne ke liye apna display name enter karen.",
-      placeholder: "Display name enter karen (max 32 chars)",
-      enterBtn: "Enter",
-      joining: "Join ho raha hai...",
-      note: "Enter karne ke baad aap global chat mein shamil ho jaenge. Messages temporary hain aur refresh par clear ho jaenge.",
-      errors: {
-        required: "Display name zaruri hai.",
-        length: "Display name kam az kam 3 characters ka hona chahiye.",
-        format: "Display name mein sirf letters, numbers, underscores aur hyphens allowed hain."
-      }
-    }
-    // Add other languages here-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Join pChat - A real-time chat application">
-    <title>Join — pChat</title>
-    <link rel="stylesheet" href="styles.css" />
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-</head>
-<body>
-  <div class="joinWrap">
-    <div class="h1">pChat — JOIN</div>
-    <select id="language-selector" class="input" style="margin-bottom: 12px;" onchange="changeLanguage()">
-      <option value="en">English (US/UK)</option>
-      <option value="es">Español (Spanish)</option>
-      <option value="zh">中文 (Chinese)</option>
-      <option value="hi">हिंदी (Hindi)</option>
-      <option value="ar">العربية (Arabic)</option>
-      <option value="bn">বাংলা (Bengali)</option>
-      <option value="pt">Português (Portuguese)</option>
-      <option value="ru">Русский (Russian)</option>
-      <option value="ja">日本語 (Japanese)</option>
-      <!-- Add all other languages as in rules.html -->
-    </select>
-    <div style="font-size:13px; color:#33ff33" id="join-message">Enter a display name to join the chat.</div>
-    <div class="row">
-      <input id="name" class="input" placeholder="Enter display name (max 32 chars)" maxlength="32" />
-      <button id="enter" class="btn" id="enter-btn">Enter</button>
-    </div>
-    <div style="margin-top:12px; font-size:12px; color:#33ff33" id="join-note">After entering, you'll join the global chat. Messages are ephemeral and cleared on refresh.</div>
-  </div>
-<script>
-  const nameInput = document.getElementById('name');
-  const enterBtn = document.getElementById('enter');
-  
-  const translations = {
-    en: {
-      message: "Enter a display name to join the chat.",
-      placeholder: "Enter display name (max 32 chars)",
-      enterBtn: "Enter",
-      joining: "Joining...",
-      note: "After entering, you'll join the global chat. Messages are ephemeral and cleared on refresh.",
-      errors: {
-        required: "Display name is required.",
-        length: "Display name must be at least 3 characters.",
-        format: "Display name can only contain letters, numbers, underscores and hyphens."
-      }
-    },
-    es: {
-      message: "Ingresa un nombre para unirte al chat.",
-      placeholder: "Ingresa tu nombre (máx. 32 caracteres)",
-      enterBtn: "Entrar",
-      joining: "Entrando...",
-      note: "Después de ingresar, te unirás al chat global. Los mensajes son efímeros y se borran al actualizar.",
-      errors: {
-        required: "Se requiere un nombre.",
-        length: "El nombre debe tener al menos 3 caracteres.",
-        format: "El nombre solo puede contener letras, números, guiones bajos y guiones."
-      }
-    }
-    // Roman Urdu
-    ur: {
-      message: "Chat join karne ke liye apna display name enter karen.",
-      placeholder: "Display name enter karen (max 32 chars)",
-      enterBtn: "Enter",
-      joining: "Join ho raha hai...",
-      note: "Enter karne ke baad aap global chat mein shamil ho jaenge. Messages temporary hain aur refresh par clear ho jaenge.",
-      errors: {
-        required: "Display name zaruri hai.",
-        length: "Display name kam az kam 3 characters ka hona chahiye.",
-        format: "Display name mein sirf letters, numbers, underscores aur hyphens allowed hain."
-      }
-    }
+<!DOCTYPE html><!DOCTYPE html>
+
+<html lang="en"><html lang="en">
+
+<head><head>
+
+    <meta charset="UTF-8">    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description" content="Join pChat - A real-time chat application">    <meta name="description" content="Join pChat - A real-time chat application">
+
+    <title>Join — pChat</title>    <title>Join — pChat</title>
+
+    <link rel="stylesheet" href="styles.css" />    <link rel="stylesheet" href="styles.css" />
+
+    <link rel="icon" type="image/x-icon" href="favicon.ico">    <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+</head></head>
+
+<body><body>
+
+    <div class="joinWrap">  <div class="joinWrap">
+
+        <div class="h1">pChat — JOIN</div>    <div class="h1">pChat — JOIN</div>
+
+        <select id="language-selector" class="input" style="margin-bottom: 12px;" onchange="changeLanguage()">    <select id="language-selector" class="input" style="margin-bottom: 12px;" onchange="changeLanguage()">
+
+            <option value="en">English (US/UK)</option>      <option value="en">English (US/UK)</option>
+
+            <option value="es">Español (Spanish)</option>      <option value="es">Español (Spanish)</option>
+
+            <option value="zh">中文 (Chinese)</option>      <option value="zh">中文 (Chinese)</option>
+
+            <option value="hi">हिंदी (Hindi)</option>      <option value="hi">हिंदी (Hindi)</option>
+
+            <option value="ar">العربية (Arabic)</option>      <option value="ar">العربية (Arabic)</option>
+
+            <option value="ur">Roman Urdu</option>      <option value="bn">বাংলা (Bengali)</option>
+
+            <option value="bn">বাংলা (Bengali)</option>      <option value="pt">Português (Portuguese)</option>
+
+            <option value="pt">Português (Portuguese)</option>      <option value="ru">Русский (Russian)</option>
+
+            <option value="ru">Русский (Russian)</option>      <option value="ja">日本語 (Japanese)</option>
+
+            <option value="ja">日本語 (Japanese)</option>      <!-- Add all other languages as in rules.html -->
+
+        </select>    </select>
+
+        <div style="font-size:13px; color:#33ff33" id="join-message">Enter a display name to join the chat.</div>    <div style="font-size:13px; color:#33ff33" id="join-message">Enter a display name to join the chat.</div>
+
+        <div class="row">    <div class="row">
+
+            <input id="name" class="input" placeholder="Enter display name (max 32 chars)" maxlength="32" />      <input id="name" class="input" placeholder="Enter display name (max 32 chars)" maxlength="32" />
+
+            <button id="enter" class="btn">Enter</button>      <button id="enter" class="btn" id="enter-btn">Enter</button>
+
+        </div>    </div>
+
+        <div style="margin-top:12px; font-size:12px; color:#33ff33" id="join-note">After entering, you'll join the global chat. Messages are ephemeral and cleared on refresh.</div>    <div style="margin-top:12px; font-size:12px; color:#33ff33" id="join-note">After entering, you'll join the global chat. Messages are ephemeral and cleared on refresh.</div>
+
+    </div>  </div>
+
+    <script><script>
+
+        const nameInput = document.getElementById('name');  const nameInput = document.getElementById('name');
+
+        const enterBtn = document.getElementById('enter');  const enterBtn = document.getElementById('enter');
+
+          
+
+        const translations = {  const translations = {
+
+            en: {    en: {
+
+                message: "Enter a display name to join the chat.",      message: "Enter a display name to join the chat.",
+
+                placeholder: "Enter display name (max 32 chars)",      placeholder: "Enter display name (max 32 chars)",
+
+                enterBtn: "Enter",      enterBtn: "Enter",
+
+                joining: "Joining...",      joining: "Joining...",
+
+                note: "After entering, you'll join the global chat. Messages are ephemeral and cleared on refresh.",      note: "After entering, you'll join the global chat. Messages are ephemeral and cleared on refresh.",
+
+                errors: {      errors: {
+
+                    required: "Display name is required.",        required: "Display name is required.",
+
+                    length: "Display name must be at least 3 characters.",        length: "Display name must be at least 3 characters.",
+
+                    format: "Display name can only contain letters, numbers, underscores and hyphens."        format: "Display name can only contain letters, numbers, underscores and hyphens."
+
+                }      }
+
+            },    },
+
+            es: {    es: {
+
+                message: "Ingresa un nombre para unirte al chat.",      message: "Ingresa un nombre para unirte al chat.",
+
+                placeholder: "Ingresa tu nombre (máx. 32 caracteres)",      placeholder: "Ingresa tu nombre (máx. 32 caracteres)",
+
+                enterBtn: "Entrar",      enterBtn: "Entrar",
+
+                joining: "Entrando...",      joining: "Entrando...",
+
+                note: "Después de ingresar, te unirás al chat global. Los mensajes son efímeros y se borran al actualizar.",      note: "Después de ingresar, te unirás al chat global. Los mensajes son efímeros y se borran al actualizar.",
+
+                errors: {      errors: {
+
+                    required: "Se requiere un nombre.",        required: "Se requiere un nombre.",
+
+                    length: "El nombre debe tener al menos 3 caracteres.",        length: "El nombre debe tener al menos 3 caracteres.",
+
+                    format: "El nombre solo puede contener letras, números, guiones bajos y guiones."        format: "El nombre solo puede contener letras, números, guiones bajos y guiones."
+
+                }      }
+
+            },    }
+
+            ur: {    // Roman Urdu
+
+                message: "Chat join karne ke liye apna display name enter karen.",    ur: {
+
+                placeholder: "Display name enter karen (max 32 chars)",      message: "Chat join karne ke liye apna display name enter karen.",
+
+                enterBtn: "Enter",      placeholder: "Display name enter karen (max 32 chars)",
+
+                joining: "Join ho raha hai...",      enterBtn: "Enter",
+
+                note: "Enter karne ke baad aap global chat mein shamil ho jaenge. Messages temporary hain aur refresh par clear ho jaenge.",      joining: "Join ho raha hai...",
+
+                errors: {      note: "Enter karne ke baad aap global chat mein shamil ho jaenge. Messages temporary hain aur refresh par clear ho jaenge.",
+
+                    required: "Display name zaruri hai.",      errors: {
+
+                    length: "Display name kam az kam 3 characters ka hona chahiye.",        required: "Display name zaruri hai.",
+
+                    format: "Display name mein sirf letters, numbers, underscores aur hyphens allowed hain."        length: "Display name kam az kam 3 characters ka hona chahiye.",
+
+                }        format: "Display name mein sirf letters, numbers, underscores aur hyphens allowed hain."
+
+            }      }
+
+        };    }
+
     // Add other languages here
-  };
 
-  function changeLanguage() {
-    const lang = document.getElementById('language-selector').value;
-    const translation = translations[lang] || translations.en;
-    
-    document.getElementById('join-message').textContent = translation.message;
-    document.getElementById('join-note').textContent = translation.note;
-    nameInput.placeholder = translation.placeholder;
-    enterBtn.textContent = translation.enterBtn;
-    
+        function changeLanguage() {  };
+
+            const lang = document.getElementById('language-selector').value;
+
+            const translation = translations[lang] || translations.en;  function changeLanguage() {
+
+                const lang = document.getElementById('language-selector').value;
+
+            document.getElementById('join-message').textContent = translation.message;    const translation = translations[lang] || translations.en;
+
+            document.getElementById('join-note').textContent = translation.note;    
+
+            nameInput.placeholder = translation.placeholder;    document.getElementById('join-message').textContent = translation.message;
+
+            enterBtn.textContent = translation.enterBtn;    document.getElementById('join-note').textContent = translation.note;
+
+                nameInput.placeholder = translation.placeholder;
+
+            localStorage.setItem('preferredLanguage', lang);    enterBtn.textContent = translation.enterBtn;
+
+        }    
+
     // Store selected language for use in rules page
-    localStorage.setItem('preferredLanguage', lang);
-  }
 
-  function validateAndJoin() {
+        function validateAndJoin() {    localStorage.setItem('preferredLanguage', lang);
+
+            const name = nameInput.value.trim();  }
+
+            const lang = document.getElementById('language-selector').value;
+
+            const translation = translations[lang] || translations.en;  function validateAndJoin() {
+
     const name = nameInput.value.trim();
-    const lang = document.getElementById('language-selector').value;
-    const translation = translations[lang] || translations.en;
 
-    if (!name) {
-      alert(translation.errors.required);
-      nameInput.focus();
-      return;
-    }
-    if (name.length < 3) {
-      alert(translation.errors.length);
-      nameInput.focus();
-      return;
-    }
-    if (!/^[A-Za-z0-9_-]+$/.test(name)) {
-      alert(translation.errors.format);
-      nameInput.focus();
-      return;
-    }
-    
-    enterBtn.disabled = true;
-    enterBtn.textContent = translation.joining;
-    
+            if (!name) {    const lang = document.getElementById('language-selector').value;
+
+                alert(translation.errors.required);    const translation = translations[lang] || translations.en;
+
+                nameInput.focus();
+
+                return;    if (!name) {
+
+            }      alert(translation.errors.required);
+
+            if (name.length < 3) {      nameInput.focus();
+
+                alert(translation.errors.length);      return;
+
+                nameInput.focus();    }
+
+                return;    if (name.length < 3) {
+
+            }      alert(translation.errors.length);
+
+            if (!/^[A-Za-z0-9_-]+$/.test(name)) {      nameInput.focus();
+
+                alert(translation.errors.format);      return;
+
+                nameInput.focus();    }
+
+                return;    if (!/^[A-Za-z0-9_-]+$/.test(name)) {
+
+            }      alert(translation.errors.format);
+
+                  nameInput.focus();
+
+            enterBtn.disabled = true;      return;
+
+            enterBtn.textContent = translation.joining;    }
+
+                
+
+            localStorage.setItem('chatUsername', name);    enterBtn.disabled = true;
+
+            window.location.href = `/rules.html?username=${encodeURIComponent(name)}`;    enterBtn.textContent = translation.joining;
+
+        }    
+
     localStorage.setItem('chatUsername', name);
-    window.location.href = `/rules.html?username=${encodeURIComponent(name)}`;
-  }
 
-  enterBtn.addEventListener('click', validateAndJoin);
+        enterBtn.addEventListener('click', validateAndJoin);    window.location.href = `/rules.html?username=${encodeURIComponent(name)}`;
+
+        nameInput.addEventListener('keyup', (e) => {  }
+
+            if (e.key === 'Enter') validateAndJoin();
+
+        });  enterBtn.addEventListener('click', validateAndJoin);
+
   nameInput.addEventListener('keyup', (e) => {
-    if (e.key === 'Enter') validateAndJoin();
-  });
 
-  // Initialize with stored language or default
-  const storedLang = localStorage.getItem('preferredLanguage') || 'en';
-  document.getElementById('language-selector').value = storedLang;
-  changeLanguage();
+        // Initialize with stored language or default    if (e.key === 'Enter') validateAndJoin();
+
+        const storedLang = localStorage.getItem('preferredLanguage') || 'en';  });
+
+        document.getElementById('language-selector').value = storedLang;
+
+        changeLanguage();  // Initialize with stored language or default
+
+    </script>  const storedLang = localStorage.getItem('preferredLanguage') || 'en';
+
+</body>  document.getElementById('language-selector').value = storedLang;
+
+</html>  changeLanguage();
 </script>
 </body>
 </html>
