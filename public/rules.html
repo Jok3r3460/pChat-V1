@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Rules</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .rules-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        #timer {
+            font-size: 24px;
+            color: #fff;
+            margin: 20px 0;
+        }
+        #language-selector {
+            margin: 20px 0;
+            padding: 10px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+        }
+        #continue-btn {
+            display: none;
+            margin-top: 20px;
+        }
+        .rules-list {
+            text-align: left;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <select id="language-selector" onchange="changeLanguage()">
+            <option value="en">English (US/UK)</option>
+            <option value="es">Español (Spanish)</option>
+            <option value="zh">中文 (Chinese)</option>
+            <option value="ja">日本語 (Japanese)</option>
+            <option value="ko">한국어 (Korean)</option>
+            <option value="de">Deutsch (German)</option>
+            <option value="ru">Русский (Russian)</option>
+            <option value="fr">Français (French)</option>
+            <option value="hi">हिंदी (Hindi)</option>
+            <option value="ur">اردو (Urdu)</option>
+            <option value="it">Italiano (Italian)</option>
+            <option value="tr">Türkçe (Turkish)</option>
+            <option value="ar">العربية (Arabic)</option>
+        </select>
+
+        <div class="rules-container">
+            <h1 id="rules-title">Community Rules</h1>
+            <div id="timer">60</div>
+            <div class="rules-list" id="rules-content">
+                <!-- Rules content will be populated by JavaScript -->
+            </div>
+            <button id="continue-btn" onclick="proceedToChat()" class="btn">Continue to Chat</button>
+        </div>
+    </div>
+
+    <script>
+        // Store the username from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const username = urlParams.get('username');
+
+        // Language translations
+        const translations = {
+            en: {
+                title: "Community Rules",
+                rules: [
+                    "No hate speech or discrimination of any kind",
+                    "No abusive behavior or harassment",
+                    "No sharing of inappropriate or adult content",
+                    "No sharing of dangerous or malicious links",
+                    "Respect other users and their privacy",
+                    "Keep conversations civil and friendly",
+                    "No spamming or flooding the chat",
+                    "No sharing of personal information"
+                ]
+            },
+            es: {
+                title: "Reglas de la Comunidad",
+                rules: [
+                    "No discurso de odio ni discriminación",
+                    "No comportamiento abusivo ni acoso",
+                    "No compartir contenido inapropiado o para adultos",
+                    "No compartir enlaces peligrosos o maliciosos",
+                    "Respetar a otros usuarios y su privacidad",
+                    "Mantener las conversaciones civiles y amistosas",
+                    "No hacer spam ni inundar el chat",
+                    "No compartir información personal"
+                ]
+            },
+            // Add other languages here
+        };
+
+        let timeLeft = 60;
+        const timerElement = document.getElementById('timer');
+        const continueBtn = document.getElementById('continue-btn');
+
+        // Timer countdown
+        const timer = setInterval(() => {
+            timeLeft--;
+            timerElement.textContent = timeLeft;
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                timerElement.style.display = 'none';
+                continueBtn.style.display = 'block';
+            }
+        }, 1000);
+
+        function changeLanguage() {
+            const lang = document.getElementById('language-selector').value;
+            const translation = translations[lang] || translations.en;
+            
+            document.getElementById('rules-title').textContent = translation.title;
+            const rulesList = document.getElementById('rules-content');
+            rulesList.innerHTML = translation.rules.map(rule => `<p>• ${rule}</p>`).join('');
+        }
+
+        function proceedToChat() {
+            if (timeLeft <= 0) {
+                window.location.href = `/chat.html?username=${encodeURIComponent(username)}`;
+            }
+        }
+
+        // Initialize with English
+        changeLanguage();
+    </script>
+</body>
+</html>

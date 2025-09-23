@@ -44,7 +44,7 @@
     enterBtn.textContent = 'Joining...';
     
     localStorage.setItem('chatUsername', name);
-    window.location.href = '/chat.html';
+    window.location.href = `/rules.html?username=${encodeURIComponent(name)}`;
   }
 
   enterBtn.addEventListener('click', validateAndJoin);
