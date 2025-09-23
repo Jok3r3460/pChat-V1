@@ -3,203 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat Rules</title>
+    <meta name="description" content="pChat Rules and Guidelines">
+    <title>Rules — pChat</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
-        .container {
-            width: 760px;
-            max-width: 95%;
-            margin: 40px auto;
-        }
         .rules-container {
-            padding: 24px;
-            border: 2px solid #003300;
-            background: rgba(0, 0, 0, 0.6);
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            animation: fadeIn 0.5s ease-out;
         }
-        #timer {
-            font-size: 24px;
-            color: #00ff00;
-            margin: 20px 0;
-            text-align: center;
+        .rule-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-left: 2px solid #00ff00;
+            transition: all 0.3s ease;
         }
-        #language-selector {
-            width: 100%;
-            margin: 0 0 20px 0;
-            padding: 12px;
-            font-size: 15px;
-            background: rgba(0, 51, 0, 0.2);
-            color: #00ff00;
-            border: 1px solid #003300;
-            border-radius: 4px;
-            font-family: "Courier New", Courier, monospace;
+        .rule-item:hover {
+            background: rgba(0, 255, 0, 0.05);
+            transform: translateX(5px);
         }
-        #language-selector:focus {
-            border-color: #00ff00;
-            outline: none;
-        }
-        #language-selector option {
-            background: rgb(0, 15, 0);
-            color: #00ff00;
-            padding: 8px;
-        }
-        #continue-btn, #skip-btn {
+        .agree-btn {
             margin-top: 20px;
-            background: rgba(0, 51, 0, 0.2);
-            color: #00ff00;
-            border: 1px solid #003300;
-            padding: 12px 20px;
-            cursor: pointer;
-            border-radius: 4px;
-            font-family: "Courier New", Courier, monospace;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        #continue-btn:hover, #skip-btn:hover {
+        .agree-btn:hover {
             background: #003300;
             box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
             transform: translateY(-1px);
         }
-        #continue-btn:active, #skip-btn:active {
+        .agree-btn:active {
             transform: translateY(1px);
         }
-        .rules-list {
-            text-align: left;
-            margin: 20px 0;
-            color: #00ff00;
-        }
-        .rules-list p {
-            margin: 10px 0;
-            color: #33ff33;
-            animation: fadeIn 0.5s ease-out;
-        }
-        #rules-title {
-            font-size: 20px;
-            margin: 0 0 12px 0;
-            color: #00ff00;
-        }
-        .button-group {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-        }
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
+            from { opacity: 0; transform: translateY(-20px); }
             to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <select id="language-selector" onchange="changeLanguage()">
-            <!-- Major World Languages -->
-            <option value="en">English (US/UK)</option>
-            <option value="es">Español (Spanish)</option>
-            <option value="zh">中文 (Chinese)</option>
-            <option value="hi">हिंदी (Hindi)</option>
-            <option value="ar">العربية (Arabic)</option>
-            <option value="ur">Roman Urdu</option>
-            <option value="bn">বাংলা (Bengali)</option>
-            <option value="pt">Português (Portuguese)</option>
-            <option value="ru">Русский (Russian)</option>
-            <option value="ja">日本語 (Japanese)</option>
-        </select>
-
-        <div class="rules-container">
-            <h1 id="rules-title">Community Rules</h1>
-            <div id="timer">60</div>
-            <div class="rules-list" id="rules-content">
-                <!-- Rules content will be populated by JavaScript -->
-            </div>
-            <div class="button-group">
-                <button id="skip-btn" onclick="proceedToChat()" class="btn">Skip Wait</button>
-                <button id="continue-btn" style="display:none" onclick="proceedToChat()" class="btn">Continue to Chat</button>
-            </div>
-        </div>
+    <div class="rules-container">
+        <div class="h1" id="rules-title">Chat Rules & Guidelines</div>
+        <div class="rule-item" id="rule1">1. Be respectful to others. No harassment, hate speech, or bullying.</div>
+        <div class="rule-item" id="rule2">2. Keep conversations civil and friendly.</div>
+        <div class="rule-item" id="rule3">3. No spamming or excessive self-promotion.</div>
+        <div class="rule-item" id="rule4">4. Do not share personal information.</div>
+        <div class="rule-item" id="rule5">5. Messages are ephemeral and will be lost on refresh.</div>
+        <div class="rule-item" id="rule6">6. Chat moderators may remove disruptive users.</div>
+        <button id="agree-btn" class="btn agree-btn">I Agree to the Rules</button>
     </div>
 
     <script>
-        // Store the username from URL parameters
-        const urlParams = new URLSearchParams(window.location.search);
-        const username = urlParams.get('username');
-
-        // Language translations
         const translations = {
             en: {
-                title: "Community Rules",
+                title: "Chat Rules & Guidelines",
                 rules: [
-                    "No hate speech or discrimination of any kind",
-                    "No abusive behavior or harassment",
-                    "No sharing of inappropriate or adult content",
-                    "No sharing of dangerous or malicious links",
-                    "Respect other users and their privacy",
-                    "Keep conversations civil and friendly",
-                    "No spamming or flooding the chat",
-                    "No sharing of personal information"
-                ]
+                    "1. Be respectful to others. No harassment, hate speech, or bullying.",
+                    "2. Keep conversations civil and friendly.",
+                    "3. No spamming or excessive self-promotion.",
+                    "4. Do not share personal information.",
+                    "5. Messages are ephemeral and will be lost on refresh.",
+                    "6. Chat moderators may remove disruptive users."
+                ],
+                agreeBtn: "I Agree to the Rules"
             },
             es: {
-                title: "Reglas de la Comunidad",
+                title: "Reglas y Pautas del Chat",
                 rules: [
-                    "No al discurso de odio ni discriminación",
-                    "No al comportamiento abusivo ni acoso",
-                    "No compartir contenido inapropiado o para adultos",
-                    "No compartir enlaces peligrosos o maliciosos",
-                    "Respetar a otros usuarios y su privacidad",
-                    "Mantener las conversaciones civiles y amistosas",
-                    "No hacer spam ni inundar el chat",
-                    "No compartir información personal"
-                ]
+                    "1. Sé respetuoso con los demás. No al acoso, discurso de odio o bullying.",
+                    "2. Mantén las conversaciones civiles y amistosas.",
+                    "3. No spam ni autopromoción excesiva.",
+                    "4. No compartas información personal.",
+                    "5. Los mensajes son efímeros y se perderán al actualizar.",
+                    "6. Los moderadores pueden eliminar usuarios disruptivos."
+                ],
+                agreeBtn: "Acepto las Reglas"
             },
             ur: {
-                title: "Community Rules",
+                title: "Chat ke Qawaid aur Hidayaat",
                 rules: [
-                    "Kisi bhi kisam ki nafrat ya discrimination ki ijazat nahi hai",
-                    "Kisi ko harass ya tang karna mana hai",
-                    "Inappropriate ya adult content share karna mana hai",
-                    "Khatarnak ya virus wale links share karna mana hai",
-                    "Doosre users aur unki privacy ka khayal rakhen",
-                    "Chat ko friendly aur respectful rakhen",
-                    "Spam ya flood karna mana hai",
-                    "Personal information share na karen"
-                ]
+                    "1. Doosron ka ehtram karen. Harassment, nafrat ya bullying ki ijazat nahi hai.",
+                    "2. Guftugu shaista aur dostana rakhen.",
+                    "3. Spam ya ziada self-promotion na karen.",
+                    "4. Personal information share na karen.",
+                    "5. Messages temporary hain aur refresh par khatam ho jaenge.",
+                    "6. Chat moderators disturbing users ko remove kar sakte hain."
+                ],
+                agreeBtn: "Main Qawaid se Ittefaq karta/karti hoon"
             }
         };
 
-        let timeLeft = 60;
-        const timerElement = document.getElementById('timer');
-        const continueBtn = document.getElementById('continue-btn');
-        const skipBtn = document.getElementById('skip-btn');
-
-        // Timer countdown
-        const timer = setInterval(() => {
-            timeLeft--;
-            timerElement.textContent = timeLeft;
-            if (timeLeft <= 0) {
-                clearInterval(timer);
-                timerElement.style.display = 'none';
-                skipBtn.style.display = 'none';
-                continueBtn.style.display = 'block';
-            }
-        }, 1000);
-
-        function changeLanguage() {
-            const lang = document.getElementById('language-selector').value;
+        function updateLanguage() {
+            const lang = localStorage.getItem('preferredLanguage') || 'en';
             const translation = translations[lang] || translations.en;
             
             document.getElementById('rules-title').textContent = translation.title;
-            const rulesList = document.getElementById('rules-content');
-            rulesList.innerHTML = translation.rules.map(rule => `<p>• ${rule}</p>`).join('');
-            
-            localStorage.setItem('preferredLanguage', lang);
+            translation.rules.forEach((rule, index) => {
+                document.getElementById(`rule${index + 1}`).textContent = rule;
+            });
+            document.getElementById('agree-btn').textContent = translation.agreeBtn;
         }
 
-        function proceedToChat() {
+        document.getElementById('agree-btn').addEventListener('click', () => {
+            const username = new URLSearchParams(window.location.search).get('username');
+            if (!username) {
+                window.location.href = '/join.html';
+                return;
+            }
             window.location.href = `/chat.html?username=${encodeURIComponent(username)}`;
-        }
+        });
 
-        // Initialize with stored language preference
-        const storedLang = localStorage.getItem('preferredLanguage') || 'en';
-        document.getElementById('language-selector').value = storedLang;
-        changeLanguage();
+        // Initialize with stored language
+        updateLanguage();
     </script>
 </body>
 </html>
