@@ -8,8 +8,13 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
+        #language-selector {
+            background: #000000;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+        }
         #language-selector option {
-            background: rgb(0, 15, 0);
+            background: #000000;
             color: #00ff00;
             padding: 8px;
         }
@@ -151,9 +156,13 @@
             if (e.key === 'Enter') validateAndJoin();
         });
 
-        // Initialize with stored language or default
-        const storedLang = localStorage.getItem('preferredLanguage') || 'en';
-        document.getElementById('language-selector').value = storedLang;
+        // Initialize with system language, stored preference, or default to English
+        const systemLang = navigator.language.split('-')[0];
+        const storedLang = localStorage.getItem('preferredLanguage');
+        const defaultLang = translations.hasOwnProperty(systemLang) ? systemLang : 'en';
+        const selectedLang = storedLang || defaultLang;
+        
+        document.getElementById('language-selector').value = selectedLang;
         changeLanguage();
     </script>
 </body>
